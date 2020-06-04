@@ -1,0 +1,28 @@
+.groups-list {
+  width: 25%;
+  float: left;
+  border: solid;
+  border-color: blue;
+  border-width: 2px;
+  display: block;
+  box-sizing: border-box;
+  padding: 10px;
+  overflow:auto;
+  height: calc(100% - 90px);
+  
+}
+
+.movies-list {
+  width: 74.5%;
+  float: right;
+  //border: solid;
+  //border-color: red;
+  //border-width: 2px;
+  display: block;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.groups-list-header {
+  font-size: medium;
+}

@@ -1,0 +1,35 @@
+.movies-list-header {
+  position: relative;
+  background-color:lightgoldenrodyellow;
+  border: 2px solid black;
+  border-style: none none solid none;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.movies-list-previousPage {
+  display: inline-block;
+}
+
+.movies-list-nextPage {
+  display: inline-block;
+}
+
+.movies-list-title {
+  font-size: x-large;
+  display: inline-block;
+  vertical-align:central;
+}
+
+.movies-list-move-button {
+  margin: 5px;
+  display: inline-block;
+}
+
+.button-visible {
+  visibility:visible;
+}
+
+.button-hidden {
+  visibility: hidden;
+}

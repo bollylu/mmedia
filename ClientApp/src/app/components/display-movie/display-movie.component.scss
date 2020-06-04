@@ -1,0 +1,33 @@
+.movie-card {
+  position: relative;
+  height: 180px;
+  background: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin: 0px 0px 5px 0px;
+}
+
+.movie-title {
+  display:inline-block;
+  font-family:Arial;
+  font-weight:900;
+  padding:10px 20px 0px 10px;
+}
+
+.movie-group {
+  display: inline-block;
+  font-style: italic;
+  float: right;
+  padding: 10px 20px 0px 10px;
+}
+
+.movie-picture {
+  float:left;
+  display: inline-block;
+  width: 128px;
+  height: 160px;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin: 10px 10px 5px 5px;
+}

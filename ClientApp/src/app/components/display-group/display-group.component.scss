@@ -1,0 +1,41 @@
+.group-card {
+  display: inline-block;
+  width: 335px;
+  margin: 5px;
+  box-sizing: border-box;
+  border: 2px solid red;
+  border-style: none none solid none;
+}
+
+.group-name {
+  width: 280px;
+  display: inline-block;
+  padding: 2px;
+  box-sizing: border-box;
+  vertical-align:central;
+}
+
+.group-count {
+  display: inline-block;
+  width: 50px;
+  text-align: center;
+  border: 2px solid blue;
+  font-weight: bold;
+  padding: 2px;
+  box-sizing: border-box;
+  float:right;
+  vertical-align:central;
+}
+
+.group-namehover{
+  
+}
+
+.IsSelected {
+  border: 2px solid green;
+  background-color: paleturquoise;
+}
+
+.IsNotSelected {
+  background-color: white;
+}

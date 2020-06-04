@@ -1,0 +1,26 @@
+
+
+<div class="groups-list"  >
+  <div class="groups-list-header">
+    <ng-container *ngIf="SelectedGroupName;then GroupList;else AllGroups"></ng-container>
+    <ng-template #GroupList >
+      <button (click)="goBack()">Back</button>
+      {{displayTitle(SelectedGroupName, Level)}}
+    </ng-template>
+    <ng-template #AllGroups>
+      All groups
+    </ng-template>
+    <hr/>
+  </div>
+
+  <div *ngFor="let GroupItem of (Groups$ | async)">
+    <app-display-group [Group]="GroupItem"
+                       (groupSelected)="GroupSelected($event)"
+                       [Level]="Level"
+                       ></app-display-group>
+  </div>
+</div>
+
+<div class="movies-list">
+  <app-display-movies [GroupNameFilter]="SelectedGroupName"></app-display-movies>
+</div>
