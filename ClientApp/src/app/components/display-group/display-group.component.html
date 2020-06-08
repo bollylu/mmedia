@@ -1,9 +1,5 @@
 
-<div class="group-card" (click)="onGroupSelect()" >
-  <div class="group-name">
-    {{displayName()}}
-  </div>
-  <div class="group-count">
-    {{Group.count}}
-  </div>
-</div>
+<mat-card class="group-card" (click)="onGroupSelect()">
+      {{displayTitle(Group.name)}} ({{Group.count}})
+</mat-card>
+

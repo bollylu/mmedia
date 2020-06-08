@@ -6,13 +6,17 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using BLTools;
-
+using BLTools.Diagnostic.Logging;
 using Microsoft.Extensions.Logging;
+
+using mmedia.Models;
 
 using WebVideo.Models;
 
 namespace WebVideo.MovieService {
-  public class TMovieService : IMoviesService {
+  public class TMovieService : ALoggable, IMovieService {
+
+    private const string ROOT_NAME = "Root";
 
     public string RootPath => @"\\andromeda.sharenet.priv\films\";
     public string Source => "Andromeda";
@@ -21,6 +25,7 @@ namespace WebVideo.MovieService {
 
     #region --- Constructor(s) ---------------------------------------------------------------------------------
     public TMovieService() {
+      Logger = new TConsoleLogger();
       _Initialize();
     }
 
@@ -46,6 +51,7 @@ namespace WebVideo.MovieService {
     private readonly object _LockCache = new object();
 
     public Task LoadMoviesCache() {
+      Log("Initializing movies cache");
 
       lock (_LockCache) {
         _MoviesCache.Clear();
@@ -60,20 +66,29 @@ namespace WebVideo.MovieService {
                                                         .BeforeLast(Path.DirectorySeparatorChar)
                                                         .Replace('\\', '/');
 
-          string PictureLocation = Path.Combine(GroupName, MovieInfoItem.DirectoryName.After(RootPath, System.StringComparison.InvariantCultureIgnoreCase)
-                                                                        .After(GroupName)
-                                                                        .After(Path.DirectorySeparatorChar))
-                                       .Replace('\\', '/');
+          if (!GroupName.EndsWith('/')) {
+            GroupName = $"{GroupName}/";
+          }
+                                                        
+
+          //Logger.LogInformation($"Group name = {GroupName}");
+
+          string PictureLocation = MovieInfoItem.DirectoryName.After(RootPath, System.StringComparison.InvariantCultureIgnoreCase)
+                                                              .Replace('\\', '/');
+
+          //Logger.LogInformation($"PictureLocation = {PictureLocation}");
 
           _MoviesCache.Add(new TMovie() {
             LocalName = MovieInfoItem.Name,
-            LocalPath = MovieInfoItem.DirectoryName.After(RootPath, System.StringComparison.InvariantCultureIgnoreCase).After(GroupName).TrimStart(Path.DirectorySeparatorChar),
+            LocalPath = MovieInfoItem.DirectoryName.After(RootPath, System.StringComparison.InvariantCultureIgnoreCase),
             Group = GroupName,
             Size = MovieInfoItem.Length,
             Picture = PictureLocation
           });
         }
       }
+
+      Log("Cache initialized successfully");
       return Task.CompletedTask;
     }
 
@@ -91,63 +106,86 @@ namespace WebVideo.MovieService {
 
     #endregion --- Cache management --------------------------------------------
 
-
-    public IMovies GetAll(int startPage = 1, int pageSize = 20) {
-      IMovies RetVal;
-
-      if (_MoviesCache.IsEmpty()) {
-        return _DemoCache;
-      }
-
-      lock (_LockCache) {
-        RetVal = new TMovies() {
-          Source = Source,
-          Page = startPage,
-          AvailablePages = _MoviesCache.Count() % pageSize == 0 ?
-                           _MoviesCache.Count() / pageSize :
-                           (int)(_MoviesCache.Count() / pageSize) + 1
-        };
-
-        foreach (IMovie MovieItem in _MoviesCache.Skip((startPage.WithinLimits(1, int.MaxValue) - 1) * pageSize).Take(pageSize)) {
-          RetVal.Movies.Add(MovieItem);
-        }
-
-        return RetVal;
-      }
-    }
-
     public string CurrentGroup { get; private set; }
-    public IEnumerable<IMovieGroup> GetGroups(string group = "", int groupLevel = 1) {
+    public IMovieGroups GetGroups(string group = "") {
       if (group == null) {
         group = "";
       }
-      CurrentGroup = string.Join('/', group.Split('/').Take(groupLevel));
+
+      int GroupLevel = group.Count(x => x == '/') + 1;
+
+      CurrentGroup = group == "" ? ROOT_NAME : group.EndsWith('/') ? group : $"{group}/";
+
+      Log($"Getting groups for {group}, level={GroupLevel}");
+      Log($"Current group {CurrentGroup}");
+
+      IMovieGroups RetVal = new TMovieGroups() { Name = CurrentGroup };
 
       if (_MoviesCache.IsEmpty()) {
-        yield break;
+        return RetVal;
       }
 
       lock (_LockCache) {
 
-        IEnumerable<IMovie> FilteredCache = _MoviesCache.Where(m => m.Group.StartsWith(CurrentGroup, StringComparison.CurrentCultureIgnoreCase));
-        foreach (IEnumerable<IMovie> MovieItems in FilteredCache.GroupBy(m => m.Group)) { 
-          yield return new TMovieGroup() { Name = MovieItems.First().Group, Count = MovieItems.Count() };
+        if (CurrentGroup == ROOT_NAME) {
+
+          foreach (IEnumerable<IMovie> MovieItems in _MoviesCache.GroupBy(m => _getGroupFilter(m.Group, 1))) {
+            RetVal.Groups.Add(new TMovieGroup() { Name = _getGroupFilter(MovieItems.First().Group, 1), Count = MovieItems.Count() });
+          }
+
+        } else {
+
+          IEnumerable<IMovie> FilteredCache = _MoviesCache.Where(m => m.Group.StartsWith(CurrentGroup, StringComparison.CurrentCultureIgnoreCase));
+
+          IEnumerable<IMovie> MoviesNotInCurrentGroup = FilteredCache.Where(m => !m.Group.Equals(CurrentGroup, StringComparison.CurrentCultureIgnoreCase));
+
+          if (FilteredCache.Select(m => m.Group).Distinct().Count() > 1) {
+            foreach (IEnumerable<IMovie> MovieItems in MoviesNotInCurrentGroup.GroupBy(m => _getGroupFilter(m.Group, GroupLevel + 1))) {
+              RetVal.Groups.Add(new TMovieGroup() { Name = _getGroupFilter(MovieItems.First().Group, GroupLevel + 1), Count = MovieItems.Count() });
+            }
+          }
+
         }
 
       }
+
+      return RetVal;
     }
 
     public IMovies GetMovies(string group, int groupLevel = 1, int startPage = 1, int pageSize = 20) {
+
+
+
       IMovies RetVal;
 
       if (_MoviesCache.IsEmpty()) {
         return _DemoCache;
       }
 
-      string GroupWithLevel = string.Join('/', group.Split('/').Take(groupLevel));
+      #region --- All movies --------------------------------------------
+      if (string.IsNullOrWhiteSpace(group)) {
+        lock (_LockCache) {
+          RetVal = new TMovies() {
+            Source = Source,
+            Page = startPage,
+            AvailablePages = _MoviesCache.Count() % pageSize == 0 ?
+                             _MoviesCache.Count() / pageSize :
+                             (int)(_MoviesCache.Count() / pageSize) + 1
+          };
+
+          foreach (IMovie MovieItem in _MoviesCache.Skip((startPage.WithinLimits(1, int.MaxValue) - 1) * pageSize).Take(pageSize)) {
+            RetVal.Movies.Add(MovieItem);
+          }
+
+          return RetVal;
+        }
+      }
+      #endregion --- All movies --------------------------------------------
+
+      string CurrentGroup = $"{group.TrimEnd('/')}/";
 
       lock (_LockCache) {
-        IEnumerable<IMovie> FilteredCache = _MoviesCache.Where(m => m.Group.StartsWith(GroupWithLevel, StringComparison.CurrentCultureIgnoreCase));
+        IEnumerable<IMovie> FilteredCache = _MoviesCache.Where(m => m.Group.StartsWith(CurrentGroup, StringComparison.CurrentCultureIgnoreCase));
 
         RetVal = new TMovies() {
           Source = Source,
@@ -185,6 +223,13 @@ namespace WebVideo.MovieService {
       } catch {
         return _MissingPicture;
       }
+    }
+
+    private string _getGroupFilter(string group, int level = 1) {
+      if (string.IsNullOrWhiteSpace(group)) {
+        return "";
+      }
+      return string.Join("/", group.Split('/').Take(level));
     }
   }
 }

@@ -22,29 +22,21 @@ namespace WebVideo.Controllers {
   [ApiController]
   public class MoviesController : ControllerBase {
 
-    IMoviesService MovieServices;
+    IMovieService MovieServices;
 
-    public MoviesController(IMoviesService movieServices) {
+    public MoviesController(IMovieService movieServices) {
       MovieServices = movieServices;
     }
 
     [HttpGet()]
-    public IActionResult Get(int page = 1, int items = 20) {
-      return Ok(MovieServices.GetAll(page, items));
-    }
-
-    [HttpGet("forGroup")]
     public IActionResult Get(string group = "", int level = 1, int page = 1, int items = 20) {
-      if (string.IsNullOrWhiteSpace(group)) {
-        return Ok(MovieServices.GetAll(page, items));
-      } else {
-        return Ok(MovieServices.GetMovies(WebUtility.UrlDecode(group), level, page, items));
-      }
+      return Ok(MovieServices.GetMovies(WebUtility.UrlDecode(group), level, page, items));
     }
 
     [HttpGet("getPicture/{pathname}")]
     public async Task<IActionResult> GetPicture(string pathname) {
       return File(await MovieServices.GetPicture(WebUtility.UrlDecode(pathname)), "image/jpeg");
     }
+
   }
 }

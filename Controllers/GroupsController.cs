@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using mmedia.Models;
 using WebVideo.Models;
 using WebVideo.MovieService;
 
@@ -18,16 +18,15 @@ namespace WebVideo.Controllers {
   [ApiController]
   public class GroupsController : ControllerBase {
 
-    IMoviesService MovieServices;
+    IMovieService MovieServices;
 
-    public GroupsController(IMoviesService movieServices) {
+    public GroupsController(IMovieService movieServices) {
       MovieServices = movieServices;
     }
 
     [HttpGet]
-    public IEnumerable<IMovieGroup> Get(string group, int level=1) {
-      return MovieServices.GetGroups(WebUtility.UrlDecode(group), level);
-
+    public IActionResult Get(string group) {
+      return Ok(MovieServices.GetGroups(WebUtility.UrlDecode(group)));
     }
   }
 }

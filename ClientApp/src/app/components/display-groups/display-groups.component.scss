@@ -1,28 +1,44 @@
-.groups-list {
-  width: 25%;
-  float: left;
-  border: solid;
-  border-color: blue;
-  border-width: 2px;
-  display: block;
-  box-sizing: border-box;
+
+.page {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: 100%;
+  width: 100%;
   padding: 10px;
-  overflow:auto;
-  height: calc(100% - 90px);
-  
 }
 
-.movies-list {
-  width: 74.5%;
-  float: right;
-  //border: solid;
-  //border-color: red;
-  //border-width: 2px;
-  display: block;
-  box-sizing: border-box;
-  padding: 10px;
+.groups-list {
+  display:flex;
+  flex-direction:column;
+  flex: 0 0 400px;
+  margin: 10px;
 }
 
 .groups-list-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 0 0 40px;
   font-size: medium;
+  font-weight: bold;
+  flex-wrap: nowrap;
+  background-color: crimson;
+  color: white;
+}
+
+
+.groups-list-content {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  padding: 10px;
+}
+
+
+
+.movies-list {
+  display: flex;
+  flex: 5;
+  margin: 10px;
 }

@@ -18,7 +18,6 @@ export class DisplayMovieComponent implements OnInit {
   }
 
   getPicture() {
-    //console.log(this.Movie.picture);
     return this.moviesService.getPictureLocation(this.Movie.picture);
   }
 }

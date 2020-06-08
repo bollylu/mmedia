@@ -13,31 +13,35 @@ export class DisplayGroupComponent implements OnInit {
   @Input()
   Group: IGroup;
 
-  @Output() groupSelected: EventEmitter<IGroup> = new EventEmitter<IGroup>();
-
   @Input()
   IsSelected: boolean;
 
   @Input()
   Level: number;
 
+  @Output() groupSelected: EventEmitter<IGroup> = new EventEmitter<IGroup>();
+
   DisplayName: string;
 
   ngOnInit(): void {
+    //console.log("Group => " + this.Group.name);
   }
 
   onGroupSelect() {
     console.log('selecting ' + this.Group.name);
     this.groupSelected.emit(this.Group);
-    this.IsSelected = !this.IsSelected;
+    this.IsSelected = true;
   }
 
-  displayName() {
-    if (this.Group.name == '') {
-      return '---';
+  displayTitle(group: string) {
+    //console.log("displaying : " + group + " level : " + level.toString());
+    if (group === "") {
+      return "---";
     }
-    var values = this.Group.name.split('\\');
-    var retVal = values.slice(this.Level-1);
-    return retVal.join("/");
+    if (group.indexOf("/") < 0) {
+      return group;
+    }
+
+    return group.split("/").slice(-1).join("/");
   }
 }

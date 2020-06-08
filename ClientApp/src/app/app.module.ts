@@ -6,6 +6,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { MatGridListModule } from '@angular/material/grid-list';
+
 import { MainTitleComponent } from './components/MainTitle/MainTitle.component';
 import { DisplayGroupsComponent } from './components/display-groups/display-groups.component';
 import { DisplayMovieComponent } from './components/display-movie/display-movie.component';
@@ -27,7 +31,10 @@ import { MoviesFilterComponent } from './components/movies-filter/movies-filter.
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatCardModule,
+    MatListModule,
+    MatGridListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

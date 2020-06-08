@@ -12,7 +12,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 export class MainTitleComponent  {
 
-  pageTitle = 'Liste des vidéos';
+  @Input()
+  Title = 'Liste des vidéos';
 
   constructor() { }
 

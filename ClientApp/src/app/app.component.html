@@ -1,9 +1,17 @@
+<div class="page">
+  <div class="page-header">
+    <app-MainTitle Title="Video listings"></app-MainTitle>
+  </div>
+
+  <div class="page-content">
+
+    <app-display-groups></app-display-groups>
+
+    <router-outlet></router-outlet>
+
+  </div>
+
+  <div class="page-footer">Please select a group...</div>
+</div>
 
 
-<app-MainTitle></app-MainTitle>
-
-<app-display-groups [SelectedGroupName]=""></app-display-groups>
-
-<!--<app-display-movies class="movies-list"></app-display-movies>-->
-
-<router-outlet></router-outlet>

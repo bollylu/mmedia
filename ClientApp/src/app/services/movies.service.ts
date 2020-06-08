@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { IGroup } from '../model/IGroup';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IMovie } from '../model/IMovie';
 import { IMovies } from '../model/IMovies';
+import { IGroups } from "../model/IGroups";
 
 @Injectable({
   providedIn: 'root'
@@ -13,37 +12,26 @@ export class MoviesService {
 
   constructor(private http: HttpClient) { }
 
-  getGroups(group: string, level: number = 1): Observable<IGroup[]> {
+  getGroups(group: string): Observable<IGroups> {
     const params: HttpParams = new HttpParams()
-      .set("group", encodeURIComponent(group))
-      .set("level", encodeURIComponent(level));
+      .set("group", encodeURIComponent(group));
 
-    return this.http.get<IGroup[]>('/api/groups', { params });
+    return this.http.get<IGroups>('/api/groups', { params });
   }
 
-  getMovies(page: number = 1): Observable<IMovies> {
-
-    const params: HttpParams = new HttpParams()
-      .set("page", page.toString())
-      .set("items", "20");
-
-    return this.http.get<IMovies>('/api/movies', { params });
-  }
-
-  getForGroup(group: string = "", level: number = 1, page: number = 1): Observable<IMovies> {
+  getMovies(group: string = "", page: number = 1): Observable<IMovies> {
     console.log('get for group ' + group);
 
     const params: HttpParams = new HttpParams()
       .set("group", encodeURIComponent(group))
-      .set("level", level.toString())
       .set("page", page.toString())
       .set("items", "20");
 
-    return this.http.get<IMovies>("/api/movies/forGroup", { params });
+    return this.http.get<IMovies>("/api/movies", { params });
   }
 
   getPictureLocation(pathname: string): string {
-    let completeName = '/api/movies/getPicture/' + encodeURIComponent(pathname);
+    const completeName = '/api/movies/getPicture/' + encodeURIComponent(pathname);
     return completeName;
   }
 }
