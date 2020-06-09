@@ -1,35 +1,63 @@
-.movies-list-header {
-  position: relative;
-  background-color:lightgoldenrodyellow;
-  border: 2px solid black;
-  border-style: none none solid none;
+* {
   box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.movie-page {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: auto;
+  height: 100vh;
   padding: 10px;
+  background-color: gainsboro;
+  justify-items: stretch;
 }
 
-.movies-list-previousPage {
-  display: inline-block;
+/*#region Header */
+
+.movies-list-header {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: nowrap;
+  height: 40px;
+  width:inherit;
+  background-color: lightgoldenrodyellow;
 }
 
-.movies-list-nextPage {
-  display: inline-block;
-}
-
-.movies-list-title {
-  font-size: x-large;
-  display: inline-block;
-  vertical-align:central;
+.movies-list-pagenumber {
+  flex: 6;
+  text-align: center;
+  color: darkblue;
+  font-weight: bold;
 }
 
 .movies-list-move-button {
+  flex: 1;
   margin: 5px;
-  display: inline-block;
 }
 
 .button-visible {
-  visibility:visible;
+  visibility: visible;
 }
 
 .button-hidden {
   visibility: hidden;
+}
+
+/*#endregion */
+
+.movies-list-content {
+  display: flex;
+  flex-direction: column;
+  flex:inherit;
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow-y: scroll;
+  box-sizing: border-box;
+  background-color: lightpink;
 }

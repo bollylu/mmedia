@@ -1,47 +1,14 @@
-.group-card {
-  width: 335px;
-  margin: 5px;
+* {
   box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.group-card {
+  width: 330px;
+  margin: 5px;
   border: 1px solid red;
   border-style: solid;
+  color: brown;
 }
 
-.group-name {
-  width: 280px;
-  display: inline-block;
-  padding: 2px;
-  box-sizing: border-box;
-  vertical-align:central;
-  color:brown;
-}
 
-.group-count {
-  display: inline-block;
-  width: 50px;
-  text-align: center;
-  border: 2px solid blue;
-  font-weight: bold;
-  padding: 2px;
-  box-sizing: border-box;
-  float:right;
-  vertical-align:central;
-}
-
-.group-namehover{
-  
-}
-
-/*.IsSelected {
-  border: 2px solid green;
-  background-color: paleturquoise;
-}
-
-.IsNotSelected {
-  background-color: white;
-}*/
-
-.movies-list {
-  display: block;
-  box-sizing: border-box;
-  padding: 10px;
-}

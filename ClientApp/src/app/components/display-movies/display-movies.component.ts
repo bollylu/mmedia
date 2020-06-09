@@ -50,12 +50,12 @@ export class DisplayMoviesComponent implements OnInit {
   }
 
   //#region --- Movements -----------------------------------------------------
-  notFirstPage() {
-    return this.page > 1;
+  isFirstPage() {
+    return this.page === 1;
   }
 
-  notLastPage() {
-    return this.page < this.availablePages;
+  isLastPage() {
+    return this.page === this.availablePages;
   }
 
   goFirstPage() {

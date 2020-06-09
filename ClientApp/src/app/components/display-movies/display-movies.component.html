@@ -1,28 +1,40 @@
-<div class="movies-list-header">
+<div class="movie-page">
 
-  <div class="movies-list-title">
-    <div class="movies-list-previousPage" >
+  <div class="movies-list-header">
+
       <button class="movies-list-move-button"
-              [ngClass]="isVisible(notFirstPage())"
-              (click)="goFirstPage()"> &lt;&lt; </button>
+              [disabled]="isFirstPage()"
+              (click)="goFirstPage()">
+        &lt;&lt;
+      </button>
       <button class="movies-list-move-button"
-              [ngClass]="isVisible(notFirstPage())"
-              (click)="goPreviousPage()"> &lt; </button>
+              [disabled]="isFirstPage()"
+              (click)="goPreviousPage()">
+        &lt;
+      </button>
+
+      <div class="movies-list-pagenumber">
+        page {{page | number:'3.0' }}/{{availablePages | number:'3.0'}}
+      </div>
+
+      <button class="movies-list-move-button"
+              [disabled]="isLastPage()"
+              (click)="goNextPage()">
+        &gt;
+      </button>
+      <button class="movies-list-move-button"
+              [disabled]="isLastPage()"
+              (click)="goLastPage()">
+        &gt;&gt;
+      </button>
+
+  </div>
+
+
+  <div class="movies-list-content">
+    <div *ngFor='let MovieItem of (movies)'>
+      <app-display-movie [Movie]="MovieItem"></app-display-movie>
     </div>
-    page {{page | number:'3.0' }}/{{availablePages | number:'3.0'}}
-  <div class="movies-list-nextPage">
-    <button class="movies-list-move-button"
-            [ngClass]="isVisible(notLastPage())"
-            (click)="goNextPage()"> &gt; </button>
-    <button class="movies-list-move-button"
-            [ngClass]="isVisible(notLastPage())"
-            (click)="goLastPage()"> &gt;&gt; </button>
   </div>
-  </div>
-</div>
 
-<div class="movies-list">
-  <div *ngFor='let MovieItem of (movies)'>
-    <app-display-movie [Movie]="MovieItem"></app-display-movie>
-  </div>
 </div>

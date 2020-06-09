@@ -1,4 +1,4 @@
-<div class="page">
+<div class="groups-page">
 
   <div class="groups-list">
     <div class="groups-list-header">
@@ -27,8 +27,6 @@
     </div>
   </div>
 
-  <div class="movies-list">
-    <app-display-movies [Group]="CurrentName" [IsDirty]="isDirty"></app-display-movies>
-  </div>
+  <app-display-movies [Group]="CurrentName" [IsDirty]="isDirty" class="test"></app-display-movies>
 
 </div>
